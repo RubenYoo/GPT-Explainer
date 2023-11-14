@@ -1,0 +1,4 @@
+.env
+*.json
+*.pptx
+__pycache__/

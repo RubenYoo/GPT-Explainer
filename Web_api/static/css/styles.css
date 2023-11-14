@@ -1,0 +1,101 @@
+.container {
+            background: white;
+            width:52%;
+	        float:left;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            margin-top: -3%;
+            }
+
+.container2 {
+            width:48%;
+            float:left;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            box-sizing: border-box;
+            margin-top: -3%;
+}
+
+.divider {
+            position: absolute;
+            top: 10%;
+            bottom: 10%;
+            left: 50%;
+            width: 1px;
+            background-color: black;
+}
+
+.file {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+}
+
+.move-buttons {
+            display: block;
+            width: 100%;
+            border: none;
+            padding: 14px 28px;
+            cursor: pointer;
+            text-align: center;
+}
+
+.submit-button {
+            margin-left: 10%;
+}
+
+
+.custom-scrollbar {
+            scrollbar-width: thin;
+            scrollbar-color: #000000 #f5f5f5;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+            width: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+            background-color: #f5f5f5;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+            background-color: #000000;
+            border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background-color: #333333;
+}
+
+#loginCard.active {
+  display: block;
+}
+
+#loginCard {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    z-index: 999;
+    height: 100px;
+}
+
+#registerCard.active {
+  display: block;
+}
+
+#registerCard {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    z-index: 999;
+    height: 100px;
+}
+
+a {
+        white-space: nowrap;
+}

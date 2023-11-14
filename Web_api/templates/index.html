@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="" xmlns="http://www.w3.org/1999/html">
+    <head>
+        <title>GPT-Explainer</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
+        <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+    </head>
+    <body>
+    <nav class="navbar" role="navigation" aria-label="main navigation">
+      <div class="navbar-brand">
+        <a class="navbar-item" href="/">
+          <img src="{{ url_for('static', filename='images/favicon.ico') }}" width="28" height="28">
+        </a>
+
+        <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </a>
+      </div>
+
+        <div class="navbar-item has-dropdown is-hoverable">
+            <a class="navbar-link">
+              History
+            </a>
+
+            <div class="navbar-dropdown is-boxed">
+              <article class="panel is-link">
+                  <p class="panel-heading">
+                    put email account
+                  </p>
+                  <p class="panel-tabs">
+                    <a class="">All</a>
+                    <a>Filenames</a>
+                    <a>Uid</a>
+                    <a>Upload Time</a>
+                    <a>Status</a>
+                  </p>
+                  <div class="panel-block">
+                    <p class="control has-icons-left">
+                      <input class="input is-link" type="text" placeholder="Search">
+                      <span class="icon is-left">
+                        <i class="fas fa-search" aria-hidden="true"></i>
+                      </span>
+                    </p>
+                  </div>
+                  <a class="panel-block is-active">
+                    <span class="panel-icon">
+                      <i class="fas fa-book" aria-hidden="true"></i>
+                    </span>
+                    file 1
+                  </a>
+                  <a class="panel-block is-active">
+                    <span class="panel-icon">
+                      <i class="fas fa-book" aria-hidden="true"></i>
+                    </span>
+                    file 2
+                  </a>
+                  <a class="panel-block is-active">
+                    <span class="panel-icon">
+                      <i class="fas fa-book" aria-hidden="true"></i>
+                    </span>
+                    file 3
+                  </a>
+                  <a class="panel-block is-active">
+                    <span class="panel-icon">
+                      <i class="fas fa-book" aria-hidden="true"></i>
+                    </span>
+                    file 4
+                  </a>
+                </article>
+            </div>
+        </div>
+
+
+
+      <div id="navbarBasicExample" class="navbar-menu">
+        <div class="navbar-end">
+          <div class="navbar-item">
+            <div class="buttons">
+                {% if not logged_in %}
+              <a class="button is-link" onclick="toggleRegisterCard()">
+                <strong>Sign up</strong>
+              </a>
+              <a class="button is-primary" onclick="toggleLoginCard()">
+                Log in
+              </a>
+                {% else %}
+                <form method="POST" action="/logout" enctype="multipart/form-data">
+                <button class="button is-danger" type="submit">
+                    <strong>Logout</strong>
+                </button>
+                </form>
+                {% endif %}
+            </div>
+          </div>
+        </div>
+          <form method="POST" action="/login" enctype="multipart/form-data">
+           <div id="loginCard" class="card">
+                    <div class="card-content">
+                        <div class="content">
+                            <div class="field">
+                                <label class="label">Email to log in</label>
+                                <div class="control">
+                                    <label>
+                                        <input class="input is-small" type="email" name="email" placeholder="Enter your email">
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+           </div>
+          </form>
+          <form method="POST" action="/register" enctype="multipart/form-data">
+          <div id="registerCard" class="card">
+                <div class="card-content">
+                    <div class="content">
+                        <div class="field">
+                            <label class="label">Email to register</label>
+                            <div class="control">
+                                <label>
+                                    <input class="input is-small" type="email" name="email" placeholder="Enter your email">
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+          </div>
+          </form>
+      </div>
+    </nav>
+        <section class="section">
+            <div class="container">
+                <h1 class="title">GPT-Explainer</h1>
+                <p class="subtitle">Import a PowerPoint file, and let ChatGPT explain it for you.</p>
+                <form method="POST" action="/" enctype="multipart/form-data" onsubmit="disableSubmitButton()">
+                    <div class="file is-large is-dark has-name is-boxed">
+                        <label class="file-label" style="align-content: center" >
+                        <input class="file-input" type="file" name="pptx-file" onchange="updateFileName(this)">
+                        <span class="file-cta">
+                        <span class="file-icon">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        </span>
+                        <span class="file-label">
+                        PowerPoint File
+                        </span>
+                        </span>
+                        <span class="file-name" id="filename">
+                        No file selected
+                        </span>
+                        </label>
+                        <div class="submit-button">
+                            <button id="submitButton" class="button is-outlined is-large is-primary" type="submit">Submit</button>
+                        </div>
+                    </div>
+                    <br>
+                </form>
+                <form id="uidForm" method="GET" action="/status">
+                    <br><br>
+                    <p class="subtitle">Enter a UID and retrieve the explained PowerPoint file.</p>
+                    <label>
+                    <input class="input is-dark is-normal" style="width: 65%" type="text" placeholder="UID" name="uid">
+                    </label>
+                    <br>
+                </form>
+                <form id="filenameForm" method="GET" action="/status">
+                    <br><br>
+                    <p class="subtitle">Or enter your filename{% if not logged_in %} (must be logged-in){% endif %}.</p>
+                    <label>
+                        <input class="input is-dark is-normal" style="width: 65%" type="text" placeholder="Filename" {% if logged_in %}name="filename"{% else %}disabled{% endif %}>
+                    </label>
+                    <br><br>
+                    <p class="has-text-weight-medium">@RubenYoo</p>
+                </form>
+            </div>
+            <div class="divider"></div>
+            <div class="container2">
+                <h1 class="title">Explained PowerPoint:</h1>
+                <div class="control">
+                    <label>
+                        <textarea id="value" class="textarea is-dark has-fixed-size custom-scrollbar" rows="20" cols="200" readonly></textarea>
+                    </label>
+                </div>
+
+                <div class="move-buttons">
+                    <button id="previousButton" class="button is-dark" disabled onclick="showPreviousValue()">previous</button>
+                    <button id="nextButton" class="button is-dark" disabled onclick="showNextValue()"></button>
+                </div>
+            </div>
+        </section>
+        <script>
+            function updateFileName(input) {
+                const filenameElement = document.getElementById('filename');
+                if (input.files.length > 0) {
+                    filenameElement.textContent = input.files[0].name;
+                } else {
+                    filenameElement.textContent = 'No file selected';
+                }
+            }
+        </script>
+        <script>
+            const jsonData = JSON.parse('{{ json_data | tojson | safe }}');
+            const keys = Object.keys(jsonData);
+            let currentIndex = 0;
+
+            function showNextValue() {
+                currentIndex = (currentIndex + 1) % keys.length;
+                updateContent();
+            }
+
+            function showPreviousValue() {
+                currentIndex = (currentIndex - 1 + keys.length) % keys.length;
+                updateContent();
+            }
+
+            function updateContent() {
+                const valueElement = document.getElementById("value");
+
+                const currentKey = keys[currentIndex];
+                if (typeof currentKey !== "undefined" && currentKey in jsonData) {
+                    valueElement.textContent = jsonData[currentKey];
+                    document.getElementById("nextButton").textContent = "[" + currentKey + ":" + (keys.length - 1) + "] " + "Show next slide";
+                    document.getElementById("previousButton").textContent = "[" + currentKey + ":" + (keys.length - 1) + "] " + "Show previous slide";
+                    document.getElementById("nextButton").disabled = currentIndex === keys.length - 1;
+                    document.getElementById("previousButton").disabled = currentIndex === 0;
+                } else {
+                    valueElement.textContent = "";
+                    document.getElementById("nextButton").textContent = "Show next slide";
+                    document.getElementById("previousButton").textContent = "Show previous slide";
+                    document.getElementById("nextButton").disabled = true;
+                    document.getElementById("previousButton").disabled = true;
+                }
+            }
+
+            document.addEventListener("DOMContentLoaded", function() {
+                updateContent();
+            });
+        </script>
+
+    <script>
+        if (window.performance && window.performance.navigation.type === window.performance.navigation.TYPE_RELOAD) {
+            window.location.href = "/";
+        }
+    </script>
+    <script>
+        function toggleLoginCard() {
+            const registerCard = document.getElementById("registerCard");
+            registerCard.classList.remove("active");
+            const loginCard = document.getElementById("loginCard");
+            loginCard.classList.toggle("active");
+        }
+    </script>
+    <script>
+        function toggleRegisterCard() {
+            const loginCard = document.getElementById("loginCard");
+            loginCard.classList.remove("active");
+            const registerCard = document.getElementById("registerCard");
+            registerCard.classList.toggle("active");
+        }
+    </script>
+    <script>
+        function disableSubmitButton() {
+            document.getElementById("submitButton").disabled = true;
+        }
+    </script>
+    </body>
+</html>
