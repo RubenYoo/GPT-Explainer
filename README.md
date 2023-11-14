@@ -2,7 +2,7 @@
 
 ## Overview
 
-![GPT Explainer Logo](Images\gpt_explainer_logo.png)
+![GPT Explainer Logo](Images/gpt_explainer_logo.png)
 
 The GPT Explainer project is a Python application designed to facilitate comprehensive understanding of PowerPoint presentations. Tailored for students who may have missed a lecture, this tool extracts text from each slide of a PowerPoint file, asynchronously sends the content to the GPT API for analysis, and returns a UUID. This UUID serves as a key to retrieve explanation of the PowerPoint file.
 
