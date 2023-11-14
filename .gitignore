@@ -2,3 +2,4 @@
 *.json
 *.pptx
 __pycache__/
+.idea/
